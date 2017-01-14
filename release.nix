@@ -10,13 +10,18 @@ with import <nixpkgs/pkgs/top-level/release-lib.nix> {
 
 let
 
+  platformPackageSet = {
+    gcc = linux;
+    clang = darwin;
+    darwin.cctools = darwin;
+  };
+
   packageSet = {
     inherit (pkgs) stdenv coreutils bash perl python nix nix-repl git vim hello;
     # linux stdenv
-    inherit (pkgs) bzip2 ed gawk gcc glibc gmp gnutar gzip which xz zlib;
+    inherit (pkgs) bzip2 ed gawk glibc gmp gnutar gzip which xz zlib;
     # darwin stdenv
-    inherit (pkgs) clang cmake cpio libiconv;
-    inherit (pkgs.darwin) cctools;
+    inherit (pkgs) cmake cpio libiconv;
   };
 
   jobs = {
@@ -30,7 +35,9 @@ let
       meta.description = "Release-critical builds for the Nixpkgs unstable channel";
     };
 
-  } // (mapTestOn (packagePlatforms packageSet));
+  }
+  // (mapTestOn platformPackageSet)
+  // (mapTestOn (packagePlatforms packageSet));
 
 in
 
