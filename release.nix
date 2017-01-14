@@ -1,4 +1,5 @@
 { nixpkgs ? <nixpkgs>
+, packageList ? [ "nix" "nix-repl" "git" "vim" ]
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 , scrubJobs ? true
 }:
@@ -7,6 +8,8 @@ with import <nixpkgs/pkgs/top-level/release-lib.nix> {
   inherit supportedSystems scrubJobs;
   packageSet = import nixpkgs;
 };
+
+with pkgs.lib;
 
 let
 
@@ -17,12 +20,13 @@ let
   };
 
   packageSet = {
-    inherit (pkgs) stdenv coreutils bash perl python nix nix-repl git vim hello;
+    inherit (pkgs) stdenv coreutils bash perl python;
     # linux stdenv
     inherit (pkgs) bzip2 ed gawk glibc gmp gnutar gzip which xz zlib;
     # darwin stdenv
     inherit (pkgs) cmake cpio libiconv;
-  };
+  }
+  // filterAttrs (n: v: elem n packageList) pkgs;
 
   jobs = {
 
