@@ -1,15 +1,14 @@
 { nixpkgs ? <nixpkgs>
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
+, scrubJobs ? true
 }:
 
 with import <nixpkgs/pkgs/top-level/release-lib.nix> {
-  inherit supportedSystems;
-  packageSet = import nixpkgs {};
+  inherit supportedSystems scrubJobs;
+  packageSet = import nixpkgs;
 };
 
 let
-
-  pkgs = import nixpkgs {};
 
   packageSet = {
     inherit (pkgs) stdenv coreutils bash perl python nix nix-repl git vim hello;
@@ -26,7 +25,7 @@ let
       name = "nixpkgs-${pkgs.lib.nixpkgsVersion}";
       constituents =
         [ jobs.stdenv.x86_64-linux
-          jobs.stdenv.x86_64-linux
+          jobs.stdenv.x86_64-darwin
         ];
       meta.description = "Release-critical builds for the Nixpkgs unstable channel";
     };
