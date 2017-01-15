@@ -1,5 +1,5 @@
 { nixpkgs ? <nixpkgs>
-, packageList ? [ "nix" "nix-repl" "git" "vim" "tmux" ]
+, packageList ? [ "nix" "nix-repl" "zsh" "silver-searcher" "jq" "fzf" "vim" "tmux" ]
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 , scrubJobs ? true
 }:
@@ -22,7 +22,19 @@ let
   ) (filterAttrsByPath (map (x: pkgs.lib.splitString "." x) packageList) pkgs);
 
   packageSet = {
-    inherit (pkgs) stdenv;
+    inherit (pkgs)
+      autoconf automake bison bzip2 clang cmake coreutils cpio ed findutils flex gawk gettext gmp
+      gnugrep gnum4 gnumake gnused groff gzip help2man libcxx libcxxabi libedit libffi libtool
+      libxml2 llvm ncurses patch pcre perl pkgconfig python unzip xz zlib;
+    perlPackages = { inherit (pkgs.perlPackages) LocaleGettext; };
+    darwin = {
+      inherit (pkgs.darwin)
+        CF CarbonHeaders CommonCrypto Csu IOKit Libinfo Libm Libnotify Libsystem adv_cmds
+        architecture bootstrap_cmds bsdmake cctools configd copyfile dyld eap8021x launchd
+        libclosure libdispatch libiconv libpthread libresolv libutil objc4 ppp removefile xnu;
+    };
+
+    inherit (pkgs) stdenv bash openssl curl git;
   }
   // filteredPackageSet;
 
