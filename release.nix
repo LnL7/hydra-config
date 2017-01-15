@@ -1,32 +1,30 @@
 { nixpkgs ? <nixpkgs>
-, packageList ? [ "nix" "nix-repl" "git" "vim" ]
+, packageList ? [ "nix" "nix-repl" "git" "vim" "tmux" ]
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 , scrubJobs ? true
 }:
 
-with import <nixpkgs/pkgs/top-level/release-lib.nix> {
-  inherit supportedSystems scrubJobs;
-  packageSet = import nixpkgs;
-};
-
-with pkgs.lib;
-
 let
 
-  platformPackageSet = {
-    gcc = linux;
-    clang = darwin;
-    darwin.cctools = darwin;
+  inherit (pkgs.lib) isDerivation isAttrs foldl' mapAttrs mapAttrsRecursive;
+  inherit (release) mapTestOn pkgs packagePlatforms;
+
+  filterAttrByPath = path: attr: pkgs.lib.setAttrByPath path (pkgs.lib.attrByPath path null attr);
+  filterAttrsByPath = paths: attr: foldl' pkgs.lib.recursiveUpdate {} (map (x: filterAttrByPath x attr) paths);
+
+  release = import <nixpkgs/pkgs/top-level/release-lib.nix> {
+    inherit supportedSystems scrubJobs;
+    packageSet = import nixpkgs;
   };
 
+  filteredPackageSet = mapAttrs (n: v:
+    if isDerivation v then v else pkgs.recurseIntoAttrs v
+  ) (filterAttrsByPath (map (x: pkgs.lib.splitString "." x) packageList) pkgs);
+
   packageSet = {
-    inherit (pkgs) stdenv coreutils bash perl python;
-    # linux stdenv
-    inherit (pkgs) bzip2 ed gawk glibc gmp gnutar gzip which xz zlib;
-    # darwin stdenv
-    inherit (pkgs) cmake cpio libiconv;
+    inherit (pkgs) stdenv;
   }
-  // filterAttrs (n: v: elem n packageList) pkgs;
+  // filteredPackageSet;
 
   jobs = {
 
@@ -40,7 +38,6 @@ let
     };
 
   }
-  // (mapTestOn platformPackageSet)
   // (mapTestOn (packagePlatforms packageSet));
 
 in
