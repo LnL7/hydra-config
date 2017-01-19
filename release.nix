@@ -1,4 +1,4 @@
-{ packageAttrs ? [ "hello" ], literalPackageAttrs ? []
+{ packageAttrs ? [ "hello" ], systemPackageAttrs ? {}
 , nixpkgs ? <nixpkgs>
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 , scrubJobs ? true
@@ -28,8 +28,12 @@ let
     };
   };
 
-  extraPackages = filterPkgs packageAttrs;
-  overridePackages = filterPkgs literalPackageAttrs;
+  extraPackages = filterPkgs packageAttrs pkgs;
+  overridePackages = {
+  }
+  // (optionalAttrs (systemPackageAttrs ? "x86_64-linux") (filterPkgs systemPackageAttrs.x86_64-linux (pkgsFor "x86_64-linux")))
+  // (optionalAttrs (systemPackageAttrs ? "i686-linux") (filterPkgs systemPackageAttrs.i686-linux (pkgsFor "i686-linux")))
+  // (optionalAttrs (systemPackageAttrs ? "x86_64-darwin") (filterPkgs systemPackageAttrs.x86_64-darwin (pkgsFor "x86_64-darwin")));
 
   jobs = mapPlatformsOn (filterRecursive defaultPackages) // mapPlatformsOn extraPackages // {
 

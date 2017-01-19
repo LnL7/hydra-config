@@ -61,6 +61,6 @@ rec {
   mapAttrByPath = path: attrs: setAttrByPath path (attrByPath path null attrs);
   filterAttrsByPath = paths: attrs: foldl' recursiveUpdate {} (map (x: mapAttrByPath x attrs) paths);
 
-  filterPkgs = paths: filterAttrsByPath (map (x: ["pkgs"] ++ splitString "." x) paths) pkgs;
+  filterPkgs = paths: pkgs: filterAttrsByPath (map (x: ["pkgs"] ++ splitString "." x) paths) pkgs;
 
 }

@@ -1,4 +1,4 @@
-{ packageAttrs ? [], literalPackageAttrs ? []
+{ packageAttrs ? []
 , nixpkgs ? <nixpkgs>
 , supportedSystems ? [ "x86_64-darwin" ]
 , scrubJobs ? true
@@ -32,7 +32,7 @@ let
 
   # prefix attribute paths with pkgs to avoid overriding defaults
   extraPackages = filterAttrsByPath (map (x: ["pkgs"] ++ splitString "." x) packageAttrs) pkgs;
-  overridePackages = filterAttrsByPath (map (x: splitString "." x) literalPackageAttrs) pkgs;
+  overridePackages = {};
 
   jobs = mapPlatformsOn (filterRecursive defaultPackages) // mapPlatformsOn extraPackages // {
 
