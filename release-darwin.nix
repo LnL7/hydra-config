@@ -17,7 +17,6 @@ let
 
   defaultPackages = {
     inherit pkgs;
-
     inherit (pkgs) stdenv
       autoconf automake bison bzip2 clang cmake coreutils cpio ed findutils flex gawk gettext gmp
       gnugrep gnum4 gnumake gnused groff gzip help2man libcxx libcxxabi libedit libffi libtool
@@ -36,6 +35,8 @@ let
   overridePackages = filterAttrsByPath (map (x: splitString "." x) literalPackageAttrs) pkgs;
 
   jobs = mapPlatformsOn (filterRecursive defaultPackages) // mapPlatformsOn extraPackages // {
+
+    inherit (darwinPkgs) darwin;
 
     unstable = pkgs.releaseTools.aggregate {
       name = "nixpkgs-${nixpkgsVersion}";
