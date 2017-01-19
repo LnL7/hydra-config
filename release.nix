@@ -19,6 +19,7 @@ let
       autoconf automake bison bzip2 clang cmake coreutils cpio ed findutils flex gawk gettext gmp
       gnugrep gnum4 gnumake gnused groff gzip help2man libcxx libcxxabi libedit libffi libtool
       libxml2 llvm ncurses patch pcre perl pkgconfig python unzip xz zlib;
+    perlPackages = pkgs.recurseIntoAttrs { inherit (pkgs.perlPackages) LocaleGettext; };
     darwin = pkgs.recurseIntoAttrs {
       inherit (pkgs.darwin)
         CF CarbonHeaders CommonCrypto Csu IOKit Libinfo Libm Libnotify Libsystem adv_cmds
