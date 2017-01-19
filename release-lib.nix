@@ -58,8 +58,8 @@ rec {
         {});
       in if res.success then res.value else {});
 
-  attrByPath = path: attr: setAttrByPath path (attrByPath path null attr);
-  filterAttrsByPath = paths: attr: foldl' recursiveUpdate {} (map (x: attrByPath x attr) paths);
+  mapAttrByPath = path: attrs: setAttrByPath path (attrByPath path null attrs);
+  filterAttrsByPath = paths: attrs: foldl' recursiveUpdate {} (map (x: mapAttrByPath x attrs) paths);
 
   filterPkgs = paths: filterAttrsByPath (map (x: ["pkgs"] ++ splitString "." x) paths) pkgs;
 

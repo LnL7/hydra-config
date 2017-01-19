@@ -1,4 +1,4 @@
-{ packageAttrs ? [], literalPackageAttrs ? []
+{ packageAttrs ? [ "hello" ], literalPackageAttrs ? []
 , nixpkgs ? <nixpkgs>
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 , scrubJobs ? true
