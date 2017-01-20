@@ -28,6 +28,15 @@ let
     };
   };
 
+  defaultSystemPackages = {
+    darwin = pkgs.recurseIntoAttrs {
+      inherit (pkgs.darwin)
+        CF CarbonHeaders CommonCrypto Csu IOKit Libinfo Libm Libnotify Libsystem adv_cmds
+        architecture bootstrap_cmds bsdmake cctools configd copyfile dyld eap8021x launchd
+        libclosure libdispatch libiconv libpthread libresolv libutil objc4 ppp removefile xnu;
+    };
+  };
+
   extraPackages = filterPkgs packageAttrs pkgs;
   overridePackages = {
   }
@@ -35,7 +44,7 @@ let
   // (optionalAttrs (systemPackageAttrs ? "i686-linux") (filterPkgs systemPackageAttrs.i686-linux (pkgsFor "i686-linux")))
   // (optionalAttrs (systemPackageAttrs ? "x86_64-darwin") (filterPkgs systemPackageAttrs.x86_64-darwin (pkgsFor "x86_64-darwin")));
 
-  jobs = mapPlatformsOn (filterRecursive defaultPackages) // mapPlatformsOn extraPackages // {
+  jobs = {
 
     unstable = pkgs.releaseTools.aggregate {
       name = "nixpkgs-${nixpkgsVersion}";
@@ -45,7 +54,11 @@ let
         ];
     };
 
-  } // overridePackages;
+  }
+  // filterRecursive defaultSystemPackages
+  // mapPlatformsOn (filterRecursive defaultPackages)
+  // mapPlatformsOn extraPackages
+  // overridePackages;
 
 in
   jobs
