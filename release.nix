@@ -13,6 +13,8 @@ with lib;
 
 let
 
+  darwinPkgs = pkgsFor "x86_64-darwin";
+
   defaultPackages = {
     inherit pkgs;
     inherit (pkgs) stdenv
@@ -20,29 +22,23 @@ let
       gnugrep gnum4 gnumake gnused groff gzip help2man libcxx libcxxabi libedit libffi libtool
       libxml2 llvm ncurses patch pcre perl pkgconfig python unzip xz zlib;
     perlPackages = pkgs.recurseIntoAttrs { inherit (pkgs.perlPackages) LocaleGettext; };
-    darwin = pkgs.recurseIntoAttrs {
-      inherit (pkgs.darwin)
-        CF CarbonHeaders CommonCrypto Csu IOKit Libinfo Libm Libnotify Libsystem adv_cmds
-        architecture bootstrap_cmds bsdmake cctools configd copyfile dyld eap8021x launchd
-        libclosure libdispatch libiconv libpthread libresolv libutil objc4 ppp removefile xnu;
-    };
   };
 
   defaultSystemPackages = {
+  };
+
+  extraPackages = filterPkgs packageAttrs pkgs;
+  overridePackages = optionalAttrs (elem "x86_64-darwin" supportedSystems) {
     darwin = pkgs.recurseIntoAttrs {
-      inherit (pkgs.darwin)
+      inherit (darwinPkgs.darwin)
         CF CarbonHeaders CommonCrypto Csu IOKit Libinfo Libm Libnotify Libsystem adv_cmds
         architecture bootstrap_cmds bsdmake cctools configd copyfile dyld eap8021x launchd
         libclosure libdispatch libiconv libpthread libresolv libutil objc4 ppp removefile xnu;
     };
-  };
-
-  extraPackages = filterPkgs packageAttrs pkgs;
-  overridePackages = {
   }
-  // (optionalAttrs (systemPackageAttrs ? "x86_64-linux") (filterPkgs systemPackageAttrs.x86_64-linux (pkgsFor "x86_64-linux")))
-  // (optionalAttrs (systemPackageAttrs ? "i686-linux") (filterPkgs systemPackageAttrs.i686-linux (pkgsFor "i686-linux")))
-  // (optionalAttrs (systemPackageAttrs ? "x86_64-darwin") (filterPkgs systemPackageAttrs.x86_64-darwin (pkgsFor "x86_64-darwin")));
+  // optionalAttrs (systemPackageAttrs ? "x86_64-linux") (filterPkgs systemPackageAttrs.x86_64-linux (pkgsFor "x86_64-linux"))
+  // optionalAttrs (systemPackageAttrs ? "i686-linux") (filterPkgs systemPackageAttrs.i686-linux (pkgsFor "i686-linux"))
+  // optionalAttrs (systemPackageAttrs ? "x86_64-darwin") (filterPkgs systemPackageAttrs.x86_64-darwin (pkgsFor "x86_64-darwin"));
 
   jobs = {
 
@@ -55,7 +51,6 @@ let
     };
 
   }
-  // filterRecursive defaultSystemPackages
   // mapPlatformsOn (filterRecursive defaultPackages)
   // mapPlatformsOn extraPackages
   // overridePackages;

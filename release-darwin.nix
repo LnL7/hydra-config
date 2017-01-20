@@ -1,4 +1,4 @@
-{ packageAttrs ? []
+{ packageAttrs ? [], systemPackageAttrs ? {}
 , nixpkgs ? <nixpkgs>
 , supportedSystems ? [ "x86_64-darwin" ]
 , scrubJobs ? true
@@ -24,13 +24,14 @@ let
     perlPackages = pkgs.recurseIntoAttrs { inherit (pkgs.perlPackages) LocaleGettext; };
   };
 
-  defaultSystemPackages = {
-    inherit (darwinPkgs) darwin;
-  };
-
   # prefix attribute paths with pkgs to avoid overriding defaults
   extraPackages = filterAttrsByPath (map (x: ["pkgs"] ++ splitString "." x) packageAttrs) pkgs;
-  overridePackages = {};
+  overridePackages = {
+    inherit (darwinPkgs) darwin;
+  }
+  // (optionalAttrs (systemPackageAttrs ? "x86_64-linux") (filterPkgs systemPackageAttrs.x86_64-linux (pkgsFor "x86_64-linux")))
+  // (optionalAttrs (systemPackageAttrs ? "i686-linux") (filterPkgs systemPackageAttrs.i686-linux (pkgsFor "i686-linux")))
+  // (optionalAttrs (systemPackageAttrs ? "x86_64-darwin") (filterPkgs systemPackageAttrs.x86_64-darwin (pkgsFor "x86_64-darwin")));
 
   jobs = {
 
@@ -54,7 +55,6 @@ let
     };
 
   }
-  // filterRecursive defaultSystemPackages
   // mapPlatformsOn (filterRecursive defaultPackages)
   // mapPlatformsOn extraPackages
   // overridePackages;
