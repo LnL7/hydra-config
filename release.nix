@@ -29,7 +29,7 @@ let
 
   extraPackages = filterPkgs packageAttrs pkgs;
   overridePackages = optionalAttrs (elem "x86_64-darwin" supportedSystems) {
-    darwin = pkgs.recurseIntoAttrs {
+    darwin = {
       inherit (darwinPkgs.darwin)
         CF CarbonHeaders CommonCrypto Csu IOKit Libinfo Libm Libnotify Libsystem
         architecture bootstrap_cmds bsdmake cctools configd copyfile dyld eap8021x launchd
