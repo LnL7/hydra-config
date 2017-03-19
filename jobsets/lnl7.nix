@@ -19,16 +19,20 @@ let
       ag
       bash
       binutils
-      binutils-raw
       boehmgc
       boost
       bundler
       bzip2
       cabal2nix
       cacert
+      clang
+      clang_37
+      clang_38
+      clang_39
       coreutils
       curl
       elixir
+      emacs
       emacs25Macport
       erlang
       expat
@@ -70,7 +74,6 @@ let
       libxml2
       libyaml
       llvm
-      llvm_39
       lua
       lzma
       mosh
@@ -86,14 +89,16 @@ let
       openssl
       pcre
       perl
-      perl522
       protobuf
       python
       python3
       readline
       reattach-to-user-namespace
+      rtags
       ruby
       rustracerd
+      rustc
+      cargo
       sqlite
       tmux
       vimHugeX
