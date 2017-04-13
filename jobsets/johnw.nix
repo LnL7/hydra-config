@@ -89,7 +89,7 @@ let
       gnugrep
       gnum4
       gnumake
-      # gnupg
+      gnupg
       gnuplot
       gnused
       gnutar
@@ -213,7 +213,7 @@ let
       perl
       perl522
       pflogsumm
-      # pinentry_mac (Xcode)
+      pinentry_mac
       pixman
       pkgconfig
       poppler_min
