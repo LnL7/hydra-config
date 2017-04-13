@@ -77,6 +77,7 @@ let
       lua
       lzma
       mosh
+      nano
       ncurses
       nix
       nix-repl
