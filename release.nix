@@ -44,10 +44,7 @@ let
 
     unstable = pkgs.releaseTools.aggregate {
       name = "nixpkgs-${nixpkgsVersion}";
-      constituents =
-        [ jobs.stdenv.x86_64-linux
-          jobs.stdenv.x86_64-darwin
-        ];
+      constituents = [ ];
     };
 
   }

@@ -10,6 +10,8 @@ let
   pkgsFor = system: pkgsForSystems."${system}" or (abort "unsupported system type: ${system}");
 
   pkgsForSystems = {
+    "armv7l-linux" = allPackages { system = "armv7l-linux"; };
+    "i686-linux" = allPackages { system = "i686-linux"; };
     "x86_64-linux" = allPackages { system = "x86_64-linux"; };
     "x86_64-darwin" = allPackages { system = "x86_64-darwin"; };
   };
