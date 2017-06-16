@@ -34,7 +34,7 @@ let
 
   jobs = {
 
-    nixos = removeMaintainers (import ./release.nix {
+    nixos = removeMaintainers (import <nixpkgs/nixos/release.nix> {
       inherit nixpkgs supportedSystems;
     });
 
