@@ -18,17 +18,35 @@ let
   defaultPackages = {
     inherit pkgs;
     inherit (pkgs) stdenv
-      autoconf automake bison bzip2 clang cmake coreutils cpio ed findutils flex gawk gettext gmp
-      gnugrep gnum4 gnumake gnused groff gzip help2man libcxx libcxxabi libedit libffi libtool
-      libxml2 llvm ncurses patch pcre perl pkgconfig python unzip xz zlib;
+      bash bison bzip2 coreutils ed findutils gawk gmp gettext gnugrep
+      gnum4 gnumake gnused gzip ncurses patch pcre perl unzip xz zlib;
     perlPackages = pkgs.recurseIntoAttrs { inherit (pkgs.perlPackages) LocaleGettext; };
+  }
+  // optionalAttrs (elem "x86_64-linux" supportedSystems) {
+    inherit (pkgs) gcc
+      acl binutils busybox diffutils glibc isl libelf libmpc
+      libsigsegv linuxHeaders m4 mpfr patchelf paxctl texinfo which;
+  }
+  // optionalAttrs (elem "x86_64-darwin" supportedSystems) {
+    inherit (pkgs) clang
+      autoconf automake cmake cpio flex groff help2man libcxx
+      libcxxabi libedit libffi libtool libxml2 llvm pkgconfig python
+      unzip;
   };
 
   defaultSystemPackages = {
   };
 
-  extraPackages = filterPkgs packageAttrs pkgs;
-  overridePackages = optionalAttrs (elem "x86_64-darwin" supportedSystems) {
+  extraPackages = {
+  }
+  // filterPkgs packageAttrs pkgs;
+
+  overridePackages = {
+    bootstrapTools = testOn supportedSystems (pkgs: pkgs.stdenv.bootstrapTools // { meta.platforms = platforms.all; });
+    cc = testOn supportedSystems (pkgs: pkgs.stdenv.cc);
+    cc-unwrapped = testOn supportedSystems (pkgs: pkgs.stdenv.cc.cc);
+  }
+  // optionalAttrs (elem "x86_64-darwin" supportedSystems) {
     darwin = {
       inherit (darwinPkgs.darwin)
         CF CarbonHeaders CommonCrypto Csu IOKit Libinfo Libm Libnotify Libsystem
