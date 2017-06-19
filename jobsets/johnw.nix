@@ -213,6 +213,7 @@ let
       perl
       perl522
       pflogsumm
+      pinentry
       pinentry_mac
       pixman
       pkgconfig
