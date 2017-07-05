@@ -27,8 +27,6 @@ let
       cscope
       ctags
       curl
-      custom-pinentry
-      custom-youtube-dl
       diffutils
       docbook5
       duply
