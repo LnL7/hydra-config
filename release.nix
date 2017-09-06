@@ -21,6 +21,7 @@ let
       bash bison bzip2 coreutils ed findutils gawk gmp gettext gnugrep
       gnum4 gnumake gnused gzip ncurses patch pcre perl unzip xz zlib;
     perlPackages = pkgs.recurseIntoAttrs { inherit (pkgs.perlPackages) LocaleGettext; };
+    tests = pkgs.tests;
   }
   // optionalAttrs (elem "x86_64-linux" supportedSystems) {
     inherit (pkgs) gcc
@@ -61,8 +62,31 @@ let
   jobs = {
 
     unstable = pkgs.releaseTools.aggregate {
-      name = "nixpkgs-${nixpkgsVersion}";
+      name = "nixpkgs-unstable-${nixpkgsVersion}";
       constituents = [ ];
+    };
+
+    tested = pkgs.releaseTools.aggregate {
+      name = "nixpkgs-tested-${nixpkgsVersion}";
+      constituents =
+        [ jobs.stdenv.x86_64-linux
+          jobs.stdenv.x86_64-darwin
+          jobs.bootstrapTools.x86_64-linux
+          jobs.bootstrapTools.x86_64-darwin
+          jobs.cc.x86_64-linux
+          jobs.cc.x86_64-darwin
+          jobs.cc-unwrapped.x86_64-linux
+          jobs.cc-unwrapped.x86_64-darwin
+
+          jobs.tests.cc-wrapper.x86_64-linux
+          jobs.tests.cc-wrapper.x86_64-darwin
+          jobs.tests.cc-wrapper-clang.x86_64-linux
+          jobs.tests.cc-wrapper-clang.x86_64-darwin
+          jobs.tests.cc-wrapper-libcxx.x86_64-linux
+          jobs.tests.cc-wrapper-libcxx.x86_64-darwin
+          jobs.tests.stdenv-inputs.x86_64-linux
+          jobs.tests.stdenv-inputs.x86_64-darwin
+        ];
     };
 
   }
