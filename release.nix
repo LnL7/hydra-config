@@ -21,7 +21,7 @@ let
       bash bison bzip2 coreutils ed findutils gawk gmp gettext gnugrep
       gnum4 gnumake gnused gzip ncurses patch pcre perl unzip xz zlib;
     perlPackages = pkgs.recurseIntoAttrs { inherit (pkgs.perlPackages) LocaleGettext; };
-    tests = { inherit (pkgs.tests) cc-wrapper stdenv-inputs; };
+    tests = pkgs.recurseIntoAttrs { inherit (pkgs.tests) cc-wrapper stdenv-inputs; };
   }
   // optionalAttrs (elem "x86_64-linux" supportedSystems) {
     inherit (pkgs) gcc
