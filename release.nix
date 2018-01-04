@@ -71,8 +71,6 @@ let
       constituents =
         [ jobs.stdenv.x86_64-linux
           jobs.stdenv.x86_64-darwin
-          jobs.bootstrapTools.x86_64-linux
-          jobs.bootstrapTools.x86_64-darwin
           jobs.cc.x86_64-linux
           jobs.cc.x86_64-darwin
           jobs.cc-unwrapped.x86_64-linux
@@ -82,9 +80,28 @@ let
           jobs.tests.cc-wrapper.x86_64-darwin
           jobs.tests.stdenv-inputs.x86_64-linux
           jobs.tests.stdenv-inputs.x86_64-darwin
-        ];
+        ]
+        ++ collect isDerivation jobs.makeBootstrapTools;
     };
 
+    makeBootstrapTools =
+      genAttrs supportedSystems
+        (system: {
+          inherit (import (nixpkgs + "/pkgs/stdenv/linux/make-bootstrap-tools.nix") { inherit system; })
+            dist test;
+        })
+      # darwin is special in this
+      // optionalAttrs (builtins.elem "x86_64-darwin" supportedSystems) {
+        x86_64-darwin =
+          let
+            bootstrap = import (nixpkgs + "/pkgs/stdenv/darwin/make-bootstrap-tools.nix") { system = "x86_64-darwin"; };
+          in {
+            # Lightweight distribution and test
+            inherit (bootstrap) dist test;
+            # Test a full stdenv bootstrap from the bootstrap tools definition
+            inherit (bootstrap.test-pkgs) stdenv;
+          };
+        };
   }
   // mapPlatformsOn (filterRecursive defaultPackages)
   // mapPlatformsOn extraPackages
