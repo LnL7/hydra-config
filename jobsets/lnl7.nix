@@ -122,10 +122,12 @@ let
       texinfoInteractive
       tmux
       vault
+      vaultenv
       vimHugeX
       wxmac
       ycmd
       zlib
+      znc
       zsh;
     haskell = pkgs.recurseIntoAttrs {
       packages = pkgs.recurseIntoAttrs {
