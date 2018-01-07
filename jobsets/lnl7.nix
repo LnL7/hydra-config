@@ -129,22 +129,19 @@ let
       zsh;
     haskell = pkgs.recurseIntoAttrs {
       packages = pkgs.recurseIntoAttrs {
-        ghc742 = pkgs.recurseIntoAttrs {
-          inherit (pkgs.haskell.packages.ghc742) ghc;
-        };
-        ghc784 = pkgs.recurseIntoAttrs {
-          inherit (pkgs.haskell.packages.ghc784) ghc;
-        };
         ghc7103 = pkgs.recurseIntoAttrs {
           inherit (pkgs.haskell.packages.ghc7103) ghc;
         };
         ghc802 = pkgs.recurseIntoAttrs {
-          inherit (pkgs.haskell.packages.ghc802) ghc
-            alex
-            cabal-install
-            happy;
+          inherit (pkgs.haskell.packages.ghc802) ghc;
+        };
+        ghc822 = pkgs.recurseIntoAttrs {
+          inherit (pkgs.haskell.packages.ghc802) ghc;
         };
       };
+    };
+    haskellPackages = pkgs.recurseIntoAttrs {
+      inherit (pkgs.haskellPackages) alex cabal-install happy;
     };
     lua51Packages = pkgs.recurseIntoAttrs {
       inherit (pkgs.lua51Packages) lua;
