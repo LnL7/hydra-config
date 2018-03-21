@@ -1,4 +1,4 @@
-{ packageAttrs ? [ ], systemPackageAttrs ? {}
+{5d4d4df8c08 packageAttrs ? [ ], systemPackageAttrs ? {}
 , nixpkgs ? <nixpkgs>
 , supportedSystems ? [ "x86_64-darwin" ]
 , scrubJobs ? true
@@ -200,8 +200,6 @@ let
         pytest
         pytest-expect
         pytest-forked
-        pytest_30
-        pytest_32
         pytest_xdist
         pytestrunner
         python
