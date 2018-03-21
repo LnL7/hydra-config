@@ -1,4 +1,4 @@
-{5d4d4df8c08 packageAttrs ? [ ], systemPackageAttrs ? {}
+{ packageAttrs ? [ ], systemPackageAttrs ? {}
 , nixpkgs ? <nixpkgs>
 , supportedSystems ? [ "x86_64-darwin" ]
 , scrubJobs ? true
