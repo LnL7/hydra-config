@@ -428,8 +428,8 @@ let
     };
 
   }
-  // mapPlatformsOn (filterRecursive defaultPackages)
-  // mapPlatformsOn extraPackages
+  // mapTestOn (packagePlatforms defaultPackages)
+  // mapTestOn (packagePlatforms extraPackages)
   // overridePackages;
 
 in

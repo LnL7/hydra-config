@@ -5,7 +5,7 @@
 }:
 
 with import ../release-lib.nix {
-  inherit supportedSystems scrubJobs;
+  inherit nixpkgs supportedSystems scrubJobs;
   packageSet = import nixpkgs;
 };
 
@@ -279,8 +279,8 @@ let
     };
 
   }
-  // mapPlatformsOn (filterRecursive defaultPackages)
-  // mapPlatformsOn extraPackages
+  // mapTestOn (packagePlatforms defaultPackages)
+  // mapTestOn (packagePlatforms extraPackages)
   // overridePackages;
 
 in
