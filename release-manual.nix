@@ -33,17 +33,12 @@ let
 
   jobs = {
 
-    manual = import (nixpkgs.path + "/doc") {};
-    nixos = import (nixpkgs.path + "/nixos/doc/manual") {} // {
-      recurseForDerivations = true;
-    };
+    manual = import (nixpkgs + "/doc");
 
     tested = pkgs.releaseTools.aggregate {
       name = "nixpkgs-tested-${nixpkgsVersion}";
       constituents =
         [ jobs.manual
-          jobs.nixos.manual
-          jobs.nixos.manualEpub
         ];
     };
   }
