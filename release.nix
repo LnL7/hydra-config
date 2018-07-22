@@ -91,8 +91,8 @@ let
         export NIX_REMOTE=$NIX_BUILD_TOP
         nix-store --init
 
-        nix-store -qR $(nix-instantiate ${cleanSource nixpkgs} -A stdenv --argstr system x86_64-linux) > linux-stdenv
-        nix-store -qR $(nix-instantiate ${cleanSource nixpkgs} -A stdenv --argstr system x86_64-darwin) > darwin-stdenv
+        nix-store -qR $(nix-instantiate ${nixpkgs} -A stdenv --argstr system x86_64-linux) > linux-stdenv
+        nix-store -qR $(nix-instantiate ${nixpkgs} -A stdenv --argstr system x86_64-darwin) > darwin-stdenv
 
         mkdir -p $out/nix-support
         touch $out/nix-support/hydra-build-products
