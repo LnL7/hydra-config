@@ -84,6 +84,23 @@ let
         ++ collect isDerivation jobs.makeBootstrapTools;
     };
 
+    stdenvMetrics = pkgs.stdenv.mkDerivation {
+      name = "stdenv-metrics";
+      nativeBuildInputs = [ pkgs.nix ];
+      buildCommand = ''
+        export NIX_REMOTE=$NIX_BUILD_TOP
+        nix-store --init
+
+        nix-store -qR $(nix-instantiate ${cleanSource nixpkgs} -A stdenv --argstr system x86_64-linux) > linux-stdenv
+        nix-store -qR $(nix-instantiate ${cleanSource nixpkgs} -A stdenv --argstr system x86_64-darwin) > darwin-stdenv
+
+        mkdir -p $out/nix-support
+        touch $out/nix-support/hydra-build-products
+        echo "linux-stdenv.requisites.count $(wc -l linux-stdenv)" >> $out/nix-support/hydra-metrics
+        echo "darwin-stdenv.requisites.count $(wc -l darwin-stdenv)" >> $out/nix-support/hydra-metrics
+      '';
+    };
+
     makeBootstrapTools =
       genAttrs supportedSystems
         (system: {
