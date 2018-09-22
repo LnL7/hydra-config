@@ -223,8 +223,8 @@ let
         webencodings
         whoosh;
     };
-    python35Packages = pkgs.recurseIntoAttrs {
-      inherit (pkgs.python35Packages)
+    python36Packages = pkgs.recurseIntoAttrs {
+      inherit (pkgs.python36Packages)
         bootstrapped-pip
         characteristic
         click
