@@ -29,14 +29,13 @@ let
       cacert
       cargo
       clang
-      clang_39
       cmake
       consul
       coreutils
       curl
       elixir
       emacs
-      emacs25Macport
+      emacsMacport
       erlang
       expat
       fzf
@@ -104,7 +103,6 @@ let
       perl
       pinentry_mac
       postgresql
-      postgresql96
       protobuf
       python
       python3
@@ -129,23 +127,10 @@ let
       zlib
       znc
       zsh;
-    haskell = pkgs.recurseIntoAttrs {
-      packages = pkgs.recurseIntoAttrs {
-        ghc7103 = pkgs.recurseIntoAttrs {
-          inherit (pkgs.haskell.packages.ghc7103) ghc;
-        };
-        ghc802 = pkgs.recurseIntoAttrs {
-          inherit (pkgs.haskell.packages.ghc802) ghc;
-        };
-        ghc822 = pkgs.recurseIntoAttrs {
-          inherit (pkgs.haskell.packages.ghc802) ghc;
-        };
-      };
-    };
     haskellPackages = pkgs.recurseIntoAttrs {
       inherit (pkgs.haskellPackages) alex cabal-install happy;
     };
-    lua51Packages = pkgs.recurseIntoAttrs {
+    luaPackages = pkgs.recurseIntoAttrs {
       inherit (pkgs.lua51Packages) lua;
     };
     perlPackages = pkgs.recurseIntoAttrs {
@@ -158,8 +143,8 @@ let
         IOTty
         WWWCurl;
     };
-    python27Packages = pkgs.recurseIntoAttrs {
-      inherit (pkgs.python27Packages)
+    python2Packages = pkgs.recurseIntoAttrs {
+      inherit (pkgs.python2Packages)
         Babel
         PyStemmer
         alabaster
@@ -223,8 +208,8 @@ let
         webencodings
         whoosh;
     };
-    python36Packages = pkgs.recurseIntoAttrs {
-      inherit (pkgs.python36Packages)
+    python3Packages = pkgs.recurseIntoAttrs {
+      inherit (pkgs.python3Packages)
         bootstrapped-pip
         characteristic
         click
@@ -237,14 +222,20 @@ let
         typed-ast;
     };
     vimPlugins = pkgs.recurseIntoAttrs {
+      LanguageClient-neovim = pkgs.vimPlugins.LanguageClient-neovim // {
+        meta.platforms = platforms.all;
+      };
+      YouCompleteMe = pkgs.vimPlugins.YouCompleteMe // {
+        meta.platforms = platforms.all;
+      };
       inherit (pkgs.vimPlugins)
         Gist
-        LanguageClient-neovim
+        # LanguageClient-neovim
         ReplaceWithRegister
         Solarized
         Syntastic
         WebAPI
-        YouCompleteMe
+        # YouCompleteMe
         commentary
         fugitive
         fzf-vim
