@@ -239,6 +239,7 @@ let
     vimPlugins = pkgs.recurseIntoAttrs {
       inherit (pkgs.vimPlugins)
         Gist
+        LanguageClient-neovim
         ReplaceWithRegister
         Solarized
         Syntastic
