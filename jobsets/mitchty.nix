@@ -269,8 +269,8 @@ let
       inherit (pkgs.idrisPackages)
         idris;
     };
-    python27Packages = pkgs.recurseIntoAttrs {
-      inherit (pkgs.python27Packages)
+    python2Packages = pkgs.recurseIntoAttrs {
+      inherit (pkgs.python2Packages)
         flake8
         howdoi
         pip

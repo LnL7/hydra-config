@@ -324,8 +324,8 @@ let
         WWWCurl
         WWWRobotRules;
     };
-    python27Packages = pkgs.recurseIntoAttrs {
-      inherit (pkgs.python27Packages)
+    python2Packages = pkgs.recurseIntoAttrs {
+      inherit (pkgs.python2Packages)
         appnope
         backports_shutil_get_terminal_size
         boost
@@ -361,8 +361,8 @@ let
         traitlets
         wcwidth;
     };
-    python35Packages = pkgs.recurseIntoAttrs {
-      inherit (pkgs.python35Packages)
+    python3Packages = pkgs.recurseIntoAttrs {
+      inherit (pkgs.python3Packages)
         appnope
         decorator
         docopt
