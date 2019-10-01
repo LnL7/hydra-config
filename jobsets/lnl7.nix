@@ -88,6 +88,7 @@ let
       mosh
       mypy
       nano
+      neovim
       ncurses
       nix
       nix-index
@@ -116,6 +117,7 @@ let
       rustracerd
       screen
       shellcheck
+      skhd
       sqlite
       texinfoInteractive
       tmux
